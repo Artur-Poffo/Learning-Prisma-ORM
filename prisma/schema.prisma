@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Trail {
+  id Int @id @default(autoincrement())
+
+  title       String
+  description String?
+  slug        String  @unique
+
+  enrollments Enrollment[]
+  courses     Course[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("trails")
+}
+
+model Course {
+  id Int @id @default(autoincrement())
+
+  title       String
+  description String?
+  slug        String  @unique
+
+  trail_id Int
+
+  trail Trail @relation(fields: [trail_id], references: [id])
+
+  lessons Lesson[]
+
+  @@map("courses")
+}
+
+model Lesson {
+  id Int @id @default(autoincrement())
+
+  title       String
+  description String?
+  slug        String  @unique
+
+  course_id Int
+
+  course Course @relation(fields: [course_id], references: [id])
+
+  @@map("lessons")
+}
+
+model Enrollment {
+  id Int @id @default(autoincrement())
+
+  Student    Student? @relation(fields: [student_id], references: [id])
+  student_id Int?
+
+  Trail    Trail? @relation(fields: [trail_id], references: [id])
+  trail_id Int?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("enrollments")
+}
+
+model Student {
+  id Int @id @default(autoincrement())
+
+  name     String
+  email    String @unique
+  password String
+
+  enrollements Enrollment[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("students")
+}
