@@ -37,7 +37,7 @@ Here are the technologies used in this project.
   
 * install dependencies.
   - `npm install` on root directory (you need installed node and npm for this)
-  
+  -  Run on root directory: `npx prisma migrate dev`
 * To run the project.
   - `npm run dev` on root directory
 
